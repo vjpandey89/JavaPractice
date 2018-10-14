@@ -2,39 +2,66 @@ package sorting;
 
 public class QuickSort {
 
-	boolean uniqueCharacters(String str) {
-		// Assuming string can have characters a-z
-		// this has 32 bits set to 0
-		int checker = 0;
+	private static void sort(int[] arr, int low, int high) {
 
-		for (int i = 0; i < str.length(); i++) {
-			int bitAtIndex = str.charAt(i) - 'a';
+		int pivot;
+		if (low < high) {
+			pivot = partition(arr, low, high);
+			sort(arr, low, pivot - 1);
+			sort(arr, pivot + 1, high);
 
-			// if that bit is already set in checker,
-			// return false
-			if ((checker & (1 << bitAtIndex)) > 0)
-				return false;
-
-			// otherwise update and continue by
-			// setting that bit in the checker
-			checker = checker | (1 << bitAtIndex);
 		}
-
-		// no duplicates encountered, return true
-		return true;
 	}
 
-	// Driver Code
-	public static void main(String args[]) {
-		QuickSort obj = new QuickSort();
-		String input = "GeekforGeeks";
+	private static int partition(int[] arr, int low, int high) {
 
-		if (obj.uniqueCharacters(input))
-			System.out.println("The String " + input + " has all unique characters");
-		else
-			System.out.println("The String " + input + " has duplicate characters");
-		
-		System.out.println(1<<5);
+		int left;
+		int right;
+		int pivot = arr[low];
+		left = low;
+		right = high;
+		while (left < right) {
+			while (arr[left] <= pivot)
+				left++;
+			while (arr[right] > pivot)
+				right--;
+			if (left < right)
+				swap(arr, left, right);
+		}
+
+		arr[low] = arr[right];
+		arr[right] = pivot;
+		return right;
+
+	}
+
+	private static void swap(int[] arr, int left, int right) {
+		int temp;
+		temp = arr[left];
+		arr[left] = arr[right];
+		arr[right] = temp;
+
+	}
+
+	/* A utility function to print array of size n */
+	static void printArray(int arr[]) {
+		int n = arr.length;
+		for (int i = 0; i < n; ++i)
+			System.out.print(arr[i] + " ");
+		System.out.println();
+	}
+
+	// Driver method
+	public static void main(String args[]) {
+		int arr[] = { 12, 11, 13, 5, 6, 7 };
+
+		System.out.println("Given Array");
+		printArray(arr);
+
+		QuickSort.sort(arr, 0, arr.length - 1);
+
+		System.out.println("\nSorted array");
+		printArray(arr);
 	}
 
 }
